@@ -1,139 +1,157 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Navbar } from '@/components/navbar'
-import { BadgePercent, Building2, CheckCircle2, FlaskConical, Home, MapPin, Phone, X } from 'lucide-react'
+import { Bot, Loader, Send, ShieldAlert, UserRound } from 'lucide-react'
 
-const agencies = [
-  { name: 'Suburban Diagnostics', area: 'Andheri, Bandra, Borivali', services: ['Blood tests', 'Women health panel', 'Full body checkup'], offer: 'FIRSTCHECK50 accepted' },
-  { name: 'Metropolis Healthcare', area: 'Dadar, Thane, Navi Mumbai', services: ['PCOS profile', 'Thyroid profile', 'Vitamin testing'], offer: 'Free home sample pickup on partner plans' },
-  { name: 'Healthians Mumbai', area: 'Home collection across Mumbai', services: ['Full body checkup', 'Anemia profile', 'Diabetes screening'], offer: '20% off first booking' },
-  { name: 'SRL Diagnostics', area: 'Chembur, Goregaon, Powai', services: ['Hormone tests', 'CBC', 'Preventive packages'], offer: 'Women wellness bundle available' },
-  { name: 'Apollo Diagnostics', area: 'Malad, Ghatkopar, Vashi', services: ['Blood test', 'Body checkup', 'Pregnancy panels'], offer: 'Priority slot support' },
-  { name: 'Thyrocare', area: 'Mumbai home collection', services: ['Thyroid', 'Lipid profile', 'Full body checkup'], offer: 'Budget health packages' },
+declare global {
+  interface Window {
+    puter?: {
+      ai?: {
+        chat?: (prompt: string, options?: { model?: string }) => Promise<string>
+      }
+    }
+  }
+}
+
+type Message = {
+  role: 'user' | 'assistant'
+  text: string
+}
+
+const quickPrompts = [
+  'I have period cramps. What can I do?',
+  'What tests are useful for PCOS screening?',
+  'How do I prepare for a blood test?',
+  'Can stress delay periods?',
 ]
 
-const testTypes = ['CBC blood test', 'PCOS profile', 'Thyroid profile', 'Vitamin D and B12', 'Full body checkup', 'Anemia profile', 'Hormone panel', 'Diabetes screening']
-const paymentModes = ['UPI', 'Net banking', 'Debit/Credit card', 'Pay at centre', 'Cash on home collection']
+function fallbackAnswer(input: string) {
+  return `I can help you think through this safely. For "${input}", track when it started, severity, related symptoms, cycle date, medicines, and any triggers. If symptoms are severe, new, worsening, or include fainting, heavy bleeding, chest pain, high fever, self-harm thoughts, or severe abdominal pain, contact a doctor or emergency service now. For non-urgent concerns, I can help you prepare questions for your gynecologist or choose a relevant checkup.`
+}
 
-export default function TestingAgenciesPage() {
-  const [agency, setAgency] = useState<any | null>(null)
-  const [testType, setTestType] = useState(testTypes[0])
-  const [date, setDate] = useState('')
-  const [time, setTime] = useState('09:00')
-  const [mode, setMode] = useState<'At home' | 'At centre'>('At home')
-  const [payment, setPayment] = useState(paymentModes[0])
-  const [coupon, setCoupon] = useState('FIRSTCHECK50')
-  const [address, setAddress] = useState('')
-  const [saved, setSaved] = useState('')
-
-  const bookTest = () => {
-    if (!agency || !date || (mode === 'At home' && !address.trim())) return
-    const booking = {
-      id: crypto.randomUUID(),
-      agency: agency.name,
-      testType,
-      date,
-      time,
-      mode,
-      payment,
-      coupon,
-      address: mode === 'At home' ? address : agency.area,
-      createdAt: new Date().toISOString(),
+function loadPuter() {
+  return new Promise<void>((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      reject(new Error('Browser only'))
+      return
     }
-    const bookings = JSON.parse(localStorage.getItem('herguardian.testBookings') || '[]')
-    localStorage.setItem('herguardian.testBookings', JSON.stringify([booking, ...bookings]))
-    setSaved(`${testType} booked with ${agency.name} on ${date}. It is now visible on Health Calendar.`)
-    setAgency(null)
+    if (window.puter?.ai?.chat) {
+      resolve()
+      return
+    }
+    const existing = document.querySelector<HTMLScriptElement>('script[data-puter]')
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true })
+      existing.addEventListener('error', () => reject(new Error('Puter failed to load')), { once: true })
+      return
+    }
+    const script = document.createElement('script')
+    script.src = 'https://js.puter.com/v2/'
+    script.async = true
+    script.dataset.puter = 'true'
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('Puter failed to load'))
+    document.body.appendChild(script)
+  })
+}
+
+export default function ChatbotPage() {
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'assistant', text: 'Hi, I am HerGuardian Chat. Ask me any women health, testing, appointment, mental wellness, period, PCOS, or preventive care question.' },
+  ])
+  const canSend = useMemo(() => input.trim().length > 0 && !loading, [input, loading])
+
+  const send = async (text = input) => {
+    const clean = text.trim()
+    if (!clean || loading) return
+    const nextMessages: Message[] = [...messages, { role: 'user', text: clean }]
+    setMessages(nextMessages)
+    setInput('')
+    setLoading(true)
+
+    try {
+      await loadPuter()
+      const healthPrompt = `You are HerGuardian AI, a careful women's health education assistant. Do not diagnose. Give helpful, concise guidance and mention urgent red flags when needed.\n\nUser: ${clean}`
+      const answer = await window.puter?.ai?.chat?.(healthPrompt, { model: 'gpt-5.4-nano' })
+      if (answer) {
+        setMessages([...nextMessages, { role: 'assistant', text: String(answer) }])
+        return
+      }
+      throw new Error('No Puter response')
+    } catch {
+      try {
+        const response = await fetch('/api/health-chatbot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: nextMessages.map((message) => ({ role: message.role, content: message.text })) }),
+        })
+        const data = await response.json()
+        setMessages([...nextMessages, { role: 'assistant', text: data.answer || fallbackAnswer(clean) }])
+      } catch {
+        setMessages([...nextMessages, { role: 'assistant', text: fallbackAnswer(clean) }])
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-28">
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-primary">Mumbai partners</p>
-          <h1 className="mt-2 text-4xl font-bold">Book blood tests and health checkups online</h1>
-          <p className="mt-3 max-w-3xl text-muted-foreground">Select a test, coupon, date, payment mode, and home or centre collection.</p>
+      <section className="mx-auto flex max-w-5xl flex-col px-4 pb-8 pt-24">
+        <div className="mb-5">
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary">Health chatbot</p>
+          <h1 className="mt-2 text-4xl font-bold">Ask HerGuardian</h1>
+          <p className="mt-2 text-muted-foreground">Uses Puter.js in the browser first, then falls back to your server AI route.</p>
         </div>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-3">
-          {[
-            ['Blood tests', 'CBC, thyroid, vitamin D, iron, sugar, lipid profile'],
-            ['Women health panels', 'PCOS, menstrual health, hormone and anemia packages'],
-            ['Body checkups', 'Full body, preventive, heart, kidney and liver packages'],
-          ].map(([title, detail]) => (
-            <div key={title} className="rounded-xl border border-border bg-card p-5">
-              <FlaskConical className="mb-3 h-6 w-6 text-accent" />
-              <h2 className="font-bold">{title}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{detail}</p>
-            </div>
-          ))}
+        <div className="mb-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm">
+          <ShieldAlert className="mr-2 inline h-4 w-4 text-yellow-700" />
+          This chatbot provides general health information, not diagnosis. For serious symptoms, contact a doctor or emergency service.
         </div>
 
-        {saved && <div className="mb-5 rounded-lg bg-accent/10 p-4 text-sm text-accent">{saved}</div>}
-
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {agencies.map((item) => (
-            <article key={item.name} className="rounded-xl border border-border bg-card p-5">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="text-xl font-bold">{item.name}</h2>
-                  <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-4 w-4" />{item.area}</p>
-                </div>
-                <Building2 className="h-6 w-6 text-primary" />
-              </div>
-              <div className="space-y-2">
-                {item.services.map((service) => <p key={service} className="flex items-center gap-2 text-sm"><CheckCircle2 className="h-4 w-4 text-accent" />{service}</p>)}
-              </div>
-              <div className="mt-4 rounded-lg bg-secondary/10 p-3 text-sm text-secondary">
-                <BadgePercent className="mr-2 inline h-4 w-4" />{item.offer}
-              </div>
-              <button onClick={() => setAgency(item)} className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground">
-                <Phone className="h-4 w-4" />Book test
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {agency && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl border border-border bg-card p-6">
-            <div className="mb-5 flex items-start justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Book test online</h2>
-                <p className="text-sm text-muted-foreground">{agency.name} - {agency.area}</p>
-              </div>
-              <button onClick={() => setAgency(null)} className="rounded-lg p-2 hover:bg-muted"><X className="h-5 w-5" /></button>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Type of test"><select value={testType} onChange={(event) => setTestType(event.target.value)} className="input">{testTypes.map((item) => <option key={item}>{item}</option>)}</select></Field>
-              <Field label="Date of testing"><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className="input" /></Field>
-              <Field label="Time"><input type="time" value={time} onChange={(event) => setTime(event.target.value)} className="input" /></Field>
-              <Field label="Payment mode"><select value={payment} onChange={(event) => setPayment(event.target.value)} className="input">{paymentModes.map((item) => <option key={item}>{item}</option>)}</select></Field>
-              <Field label="Coupon / discount code"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} className="input" /></Field>
-              <Field label="Mode of testing"><select value={mode} onChange={(event) => setMode(event.target.value as 'At home' | 'At centre')} className="input"><option>At home</option><option>At centre</option></select></Field>
-            </div>
-            {mode === 'At home' && (
-              <label className="mt-4 block">
-                <span className="mb-2 flex items-center gap-2 text-sm font-medium"><Home className="h-4 w-4" />Home address</span>
-                <textarea value={address} onChange={(event) => setAddress(event.target.value)} rows={3} className="input" placeholder="Flat, building, street, area, city, pincode" />
-              </label>
-            )}
-            <div className="mt-5 rounded-lg bg-primary/10 p-3 text-sm text-primary">
-              Payment selection is saved. Connect Razorpay keys to collect live UPI/net banking/card payments.
-            </div>
-            <button onClick={bookTest} disabled={!date || (mode === 'At home' && !address.trim())} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">
-              Confirm test booking
+        <div className="mb-4 flex flex-wrap gap-2">
+          {quickPrompts.map((prompt) => (
+            <button key={prompt} onClick={() => send(prompt)} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary">
+              {prompt}
             </button>
+          ))}
+        </div>
+
+        <div className="flex min-h-[560px] flex-col rounded-xl border border-border bg-card">
+          <div className="flex-1 space-y-4 overflow-y-auto p-4">
+            {messages.map((message, index) => (
+              <div key={index} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {message.role === 'assistant' && <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground"><Bot className="h-5 w-5" /></div>}
+                <div className={`max-w-[80%] whitespace-pre-wrap rounded-xl px-4 py-3 text-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-background'}`}>
+                  {message.text}
+                </div>
+                {message.role === 'user' && <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted"><UserRound className="h-5 w-5" /></div>}
+              </div>
+            ))}
+            {loading && <div className="flex items-center gap-2 text-sm text-muted-foreground"><Loader className="h-4 w-4 animate-spin" />HerGuardian is thinking...</div>}
+          </div>
+          <div className="border-t border-border p-4">
+            <div className="flex gap-2">
+              <input
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') send()
+                }}
+                placeholder="Ask anything about symptoms, tests, periods, PCOS, mental wellness..."
+                className="flex-1 rounded-lg border border-border bg-background px-4 py-3 outline-none focus:border-primary"
+              />
+              <button onClick={() => send()} disabled={!canSend} className="rounded-lg bg-primary px-4 text-primary-foreground disabled:opacity-50">
+                {loading ? <Loader className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </div>
-      )}
+      </section>
     </main>
   )
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <label className="block"><span className="mb-2 block text-sm font-medium">{label}</span>{children}</label>
 }
