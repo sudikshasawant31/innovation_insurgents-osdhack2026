@@ -1,230 +1,377 @@
-# HerGuardian AI - Preventive Women's Health Companion
+# HerGuardian AI
 
-A premium, AI-powered web application designed for early risk detection, personalized health guidance, and continuous healthcare support for women.
+HerGuardian AI is an AI-powered preventive healthcare companion designed especially for women. It brings health assessments, mental wellness support, doctor booking, health calendar planning, testing agency access, emergency alerts, educational resources, payments, and an AI chatbot into one web platform.
 
-## 🎯 MVP Features (Hackathon Edition)
+The platform is designed for screening support, health education, preventive guidance, and timely awareness. It helps users understand health patterns, generate reports, and take safer next steps such as booking appointments or consulting healthcare professionals.
 
-This application prioritizes **5 key features** for maximum impact:
+## Important Links
 
-### 1. **AI Health Risk Assessment** 
-- Comprehensive multi-step questionnaire
-- Detects 7+ health conditions: PCOS, Anemia, Thyroid, Endometriosis, Postpartum Depression, Menopause, Vitamin Deficiency
-- Risk scoring with confidence levels
-- Beautiful progress visualization
+* Live Deployment Link: https://her-guardian-ai-app-updated.vercel.app/
+* Demo Video Link: Add your YouTube or Google Drive demo video link here.
 
-### 2. **Mental Wellness Screening**
-- PHQ-9 Depression screening
-- GAD-7 Anxiety screening  
-- Daily mood tracker with 10-point scale
-- Historical mood tracking with visual timeline
+## Features
 
-### 3. **Personalized Recommendations Engine**
-- AI-driven health suggestions based on assessment results
-- 4 categories: Nutrition, Lifestyle, Mental Wellness, Medical
-- Priority-based action items
-- Progress tracking for each recommendation
+* AI health dashboard with health score, mental wellness, activity status, reports, recommendations, and emergency access.
+* Login and registration using Google login, email/password, mobile password login, and OTP-ready flows.
+* Health assessments with personalized score, analysis, recommendations, and downloadable PDF reports.
+* Mental wellness module with mood tracking, PHQ-9 screening, GAD-7 screening, notes, and reports.
+* Doctor booking with gynecologists, general physicians, endocrinologists, cardiologists, breast specialists, bone specialists, and mental health counsellors.
+* Weekly checkup module for regular health check-ins and analysis.
+* Dynamic health calendar for periods, appointments, lab tests, health checkups, and reminders.
+* Mumbai-focused testing agencies section for blood tests, women health panels, PCOS screening, body checkups, and home sample collection.
+* Facts about female health with educational videos, articles, links, thumbnails, and Did You Know content.
+* Wellness and Preventive Care with Burnout and Stress, Breast Health, and Bone Health modules.
+* Chatbot for educational guidance about symptoms, periods, PCOS, tests, appointments, stress, and preventive care.
+* Emergency and health alert flows with SMS, call, and email-ready integration.
+* Razorpay-ready support/payment flow where users select a method, enter an amount, and proceed through UPI, cards, net banking, or QR.
+* Light and dark mode support with responsive UI.
 
-### 4. **Doctor-Ready PDF Report Generation**
-- Professional, beautiful health reports
-- Risk summary with visual charts
-- Recommendations and doctor notes
-- One-click PDF download for healthcare provider sharing
-- Uses html2canvas and jsPDF
+## Tech Stack and Tools
 
-### 5. **Voice Assistant & Emergency Contact Flow**
-- Voice command support (UI placeholder for voice recognition)
-- Emergency button with 10-second countdown
-- Quick access to emergency contacts
-- Nearby hospitals with ratings and services
-- Emergency alert system
+* Frontend: Next.js App Router, React, TypeScript
+* Styling: Tailwind CSS, shadcn-style UI components, Lucide icons
+* Animations: Framer Motion
+* Charts: Recharts
+* Forms and Validation: React Hook Form, Zod
+* Database: PostgreSQL using Neon or another Postgres provider
+* ORM: Drizzle ORM
+* Authentication: Better Auth / custom auth routes
+* AI Chatbot: OpenAI / Gemini / Puter.js-compatible chatbot setup
+* AI Development Assistant: OpenAI Codex for planning, coding, debugging, UI improvements, README writing, and deployment guidance
+* AI Content Support: ChatGPT-style assistance for health content structure, demo scripts, documentation, and project explanation
+* AI Health Guidance Layer: Prompt-based chatbot flow for educational health support and safer next-step suggestions
+* SMS, OTP, and Calling: Twilio
+* Payments: Razorpay Checkout
+* Deployment: Vercel
+* Database Hosting: Neon PostgreSQL
+* Version Control: GitHub
 
-## 🏗️ Architecture
+## Dependencies
 
-### Tech Stack
-- **Framework:** Next.js 16 (App Router)
-- **Language:** TypeScript
-- **Styling:** TailwindCSS 4 + custom design system
-- **UI Components:** shadcn/ui + custom components
-- **Animations:** Framer Motion
-- **Forms:** React Hook Form + Zod validation
-- **Data Fetching:** TanStack React Query (configured, placeholder integration)
-- **Charts:** Recharts
-- **PDF Export:** jsPDF + html2canvas
-- **Icons:** Lucide React
+Main dependencies include:
 
-### Design System
-- **Color Palette:** Purple (#7C3AED), Pink (#EC4899), Teal (#14B8A6)
-- **Typography:** Inter font family
-- **Effects:** Glassmorphism, smooth animations, gradient accents
-- **Responsive:** Mobile-first design with full tablet/desktop support
-- **Dark Mode:** Full dark mode support
+* next
+* react
+* react-dom
+* typescript
+* tailwindcss
+* framer-motion
+* lucide-react
+* recharts
+* react-hook-form
+* zod
+* drizzle-orm
+* pg
+* better-auth
+* next-auth
+* openai
+* jspdf
+* html2canvas
+* axios
 
-## 📁 Project Structure
-
-```
-/app
-  /page.tsx                 # Landing page
-  /dashboard/page.tsx       # Health dashboard
-  /assessment/page.tsx      # Health risk assessment flow
-  /mental-wellness/page.tsx # Mental health screening
-  /recommendations/page.tsx # Personalized recommendations
-  /reports/page.tsx         # PDF report generation
-  /emergency/page.tsx       # Emergency contacts & voice assistant
-  /layout.tsx              # Root layout with metadata
-  /globals.css             # Global styles & design tokens
-
-/components
-  /navbar.tsx              # Navigation component
-  /assessment-form.tsx     # Multi-step assessment form
-
-/lib
-  /utils.ts               # Utility functions (cn, etc.)
-```
-
-## 🚀 Getting Started
-
-### Installation
+Install all dependencies with:
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Open in browser
-# Navigate to http://localhost:3000
+npm install
 ```
 
-### Build for Production
+## Setup Instructions
+
+### 1\. Clone the Repository
 
 ```bash
-pnpm build
-pnpm start
+git clone https://github.com/your-username/herguardian-ai.git
+cd herguardian-ai
 ```
 
-## 📊 Key Pages
+### 2\. Install Dependencies
 
-### Landing Page (`/`)
-- Hero section with animated graphics
-- Feature showcase with 6 core features
-- Testimonials from healthcare professionals
-- CTA buttons for assessment and learning
+```bash
+npm install
 
-### Dashboard (`/dashboard`)
-- Health score overview
-- Quick action buttons
-- Health trend charts (line chart)
-- Mood tracking (bar chart)
-- Nutrition breakdown (pie chart)
-- Upcoming appointments
-- Daily wellness tips
 
-### Assessment (`/assessment`)
-- 4-step health questionnaire
-  1. Basic Information (age, weight, height, cycle)
-  2. Current Symptoms (8 symptom options)
-  3. Lifestyle Factors (sleep, stress, water, activity)
-  4. Medical History (family history conditions)
-- Beautiful results page with health score
-- Risk assessment for 5 conditions
-- Personalized recommendations
+```
 
-### Mental Wellness (`/mental-wellness`)
-- 3 assessment tabs:
-  - Mood Tracker with 10-point daily mood selector
-  - PHQ-9 Depression screening (27 points max)
-  - GAD-7 Anxiety screening (21 points max)
-- Score interpretation with severity levels
-- Mood history tracking
+### 3\. Create Environment File
 
-### Recommendations (`/recommendations`)
-- 4 category breakdown
-  - Nutrition (iron, vitamin D, calcium, omega-3)
-  - Lifestyle (exercise, stress, sleep, hydration)
-  - Mental Wellness (meditation, mood tracking, support)
-  - Medical (checkups, blood work, exams, tracking)
-- Priority-based items (High/Medium/Low)
-- Progress tracking with completion marks
-- Summary statistics
+Create a file named `.env.local` in the root folder.
 
-### Reports (`/reports`)
-- 2 report types:
-  - Comprehensive (full assessment with all details)
-  - Summary (key findings and top 5 recommendations)
-- PDF export with jsPDF
-- Professional formatting for healthcare providers
-- Patient info, health scores, risk assessment, recommendations
+```env
+DATABASE\_URL=your\_neon\_postgresql\_url
 
-### Emergency (`/emergency`)
-- Large emergency button with countdown
-- 10 emergency contacts (Mom, Doctor, Emergency Services)
-- 3 nearby hospitals with:
-  - Distance information
-  - Star ratings
-  - Medical services offered
-  - Direct call buttons
-- Voice command UI (placeholder)
-- Emergency alert overlay
+NEXT\_PUBLIC\_APP\_URL=http://localhost:3000
 
-## 🎨 Design Highlights
+GOOGLE\_CLIENT\_ID=your\_google\_client\_id
+GOOGLE\_CLIENT\_SECRET=your\_google\_client\_secret
 
-- **Glassmorphism:** Translucent cards with backdrop blur
-- **Animations:** Smooth transitions, staggered delays, hover effects
-- **Color Gradients:** Primary→Secondary→Accent color flows
-- **Responsive Grid:** Auto-adapting layouts for all screen sizes
-- **Accessibility:** WCAG compliant with proper contrast ratios
-- **Performance:** Optimized images, lazy loading, code splitting
+TWILIO\_ACCOUNT\_SID=your\_twilio\_account\_sid
+TWILIO\_AUTH\_TOKEN=your\_twilio\_auth\_token
+TWILIO\_FROM\_NUMBER=your\_twilio\_number
+TWILIO\_PHONE\_NUMBER=your\_twilio\_number
 
-## 🔄 Data Flow
+RAZORPAY\_KEY\_ID=your\_razorpay\_key\_id
+RAZORPAY\_KEY\_SECRET=your\_razorpay\_key\_secret
+NEXT\_PUBLIC\_RAZORPAY\_KEY\_ID=your\_razorpay\_key\_id
 
-### Assessment Flow
-1. User fills multi-step form
-2. Data captured in component state
-3. Results calculated and displayed
-4. Recommendations generated based on inputs
-5. PDF export available on reports page
+OPENAI\_API\_KEY=your\_ai\_api\_key
+```
 
-### State Management
-- Local component state using React hooks
-- Form state via React Hook Form
-- Query parameters for navigation
+For deployment, set `NEXT\_PUBLIC\_APP\_URL` to:
 
-## 🔮 Future Enhancements
+```env
+NEXT\_PUBLIC\_APP\_URL=https://her-guardian-ai-app-updated.vercel.app
+```
 
-- Backend integration with database (Firebase, Supabase, or custom API)
-- User authentication (Email/Password, OAuth)
-- Data persistence and historical tracking
-- Real voice assistant integration
-- Appointment scheduling system
-- Doctor messaging system
-- Integration with wearables (Apple Health, Fitbit)
-- Telemedicine capabilities
-- AI model fine-tuning with real health data
+### 4\. Run Locally
 
-## 📱 Browser Support
+```bash
+npm run dev
+```
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+Open:
 
-## 🎯 Performance Metrics
+```text
+http://localhost:3000
+```
 
-- Lighthouse Score: 95+
-- Core Web Vitals: Optimized
-- Mobile Performance: First Contentful Paint < 2s
-- Time to Interactive: < 3.5s
+### 5\. Build for Production
 
-## 📝 License
+```bash
+npm run build
+```
 
-Built for hackathon demonstration. Ready for production deployment.
+### 6\. Start Production Server
 
-## 🤝 Support
+```bash
+npm run start
+```
 
-For issues or questions, please contact the development team.
+## Database Setup
 
----
+The app is designed to use PostgreSQL through Neon or another PostgreSQL provider.
 
-**Built with ❤️ for women's health**
+1. Create a free Neon PostgreSQL project.
+2. Copy the connection string.
+3. Add it as `DATABASE\_URL` in `.env.local` and in Vercel Environment Variables.
+4. Redeploy after adding the variable.
+
+Example:
+
+```env
+DATABASE\_URL=postgresql://username:password@host/neondb?sslmode=require
+```
+
+The database schema includes users, sessions, assessments, mood entries, appointments, invoices, medical records, nutrition logs, chat history, emergency alerts, and related health records.
+
+
+## Sample Inputs and Expected Outputs
+
+### Health Assessment
+
+Sample input:
+
+```text
+Sleep: 6 hours
+Stress level: 7/10
+Mood: Low
+Activity: Moderate
+Symptoms: Fatigue, anxiety, irregular periods
+```
+
+Expected output:
+
+```text
+Health score is generated.
+Risk level and contributing factors are shown.
+Personalized recommendations are displayed.
+PDF report can be downloaded.
+Professional consultation is suggested if concern is moderate or serious.
+```
+
+### Mental Wellness
+
+Sample input:
+
+```text
+Mood score: 5/10
+PHQ-9 answers: selected by user
+GAD-7 answers: selected by user
+Notes: Feeling stressed due to workload
+```
+
+Expected output:
+
+```text
+Mood entry is saved.
+Screening score is calculated.
+Severity level is displayed.
+Report can be downloaded.
+Professional help is recommended for serious symptoms.
+```
+
+### Doctor Booking
+
+Sample input:
+
+```text
+Specialty: Gynecologist
+Date: 20 July 2026
+Reminder: Enabled
+```
+
+Expected output:
+
+```text
+Appointment booking flow opens.
+Selected doctor details are shown.
+Reminder information is prepared.
+Calendar can reflect the appointment.
+```
+
+### Health Calendar
+
+Sample input:
+
+```text
+Cycle length: 28 days
+Period length: 5 days
+Appointment date: 20 July 2026
+Lab test date: 22 July 2026
+```
+
+Expected output:
+
+```text
+Calendar updates dynamically.
+Period, appointment, and lab test events appear in the calendar.
+Upcoming tasks are shown.
+```
+
+### Testing Agency Booking
+
+Sample input:
+
+```text
+Test: PCOS screening
+Mode: At home
+Address: User-entered address
+Coupon: FIRSTCHECK50
+Payment method: UPI
+```
+
+Expected output:
+
+```text
+Testing request details are prepared.
+Discount information is shown.
+Payment flow can continue through Razorpay.
+```
+
+### Razorpay Support Payment
+
+Sample input:
+
+```text
+Payment option: UPI apps
+Amount: 250
+```
+
+Expected output:
+
+```text
+Razorpay order is created.
+Checkout opens with INR 250.
+User can pay using the selected supported method.
+```
+
+### Chatbot
+
+Sample input:
+
+```text
+I have period cramps. What can I do?
+```
+
+Expected output:
+
+```text
+Educational guidance is shown.
+Safe self-care suggestions are displayed.
+Professional help is recommended if symptoms are severe or unusual.
+```
+
+## Documentation
+
+Additional documentation files:
+
+* `ARCHITECTURE.md` - system diagram, pipeline, data flow, components, and design decisions
+* `TECHNICAL\_REPORT.md` - runtime, model usage, latency, memory, and device notes
+* `LOCAL\_AI\_VERIFICATION.md` - what runs locally and what requires internet
+* `EVALUATION.md` - testing method, quality results, baseline comparison, and known failures
+* `PRIVACY\_AND\_SAFETY.md` - data handling, storage, permissions, limitations, and risks
+* `ATTRIBUTION.md` - models, libraries, APIs, references, and pre-existing work
+
+## How We Coordinated With AI Tools
+
+AI tools were used as development and planning assistants throughout the project. OpenAI Codex helped understand the code structure, debug errors, improve UI/UX, add new modules, fix authentication issues, integrate payment flow, prepare deployment steps, and generate documentation.
+
+AI support was used for:
+
+* Feature planning across dashboard, assessments, doctors, weekly checkup, calendar, testing agencies, facts, chatbot, support, and wellness care.
+* Code development for Next.js pages, API routes, UI components, forms, charts, reports, and navigation flows.
+* Debugging build errors, missing dependencies, incorrect imports, broken buttons, Razorpay issues, database setup, and deployment configuration.
+* UI/UX improvements including premium healthcare styling, dark/light mode, layouts, visual assets, and more engaging wellness sections.
+* Health content structuring for PCOS, menopause, menstrual health, mental wellness, reproductive health, nutrition, bone health, and preventive care.
+* Medical safety language to focus on awareness, screening, reports, and professional consultation.
+* Demo and documentation including README, GitHub explanation, deployment instructions, environment variables, and video script.
+
+AI was used as a collaborative assistant, while final project decisions, testing, feature selection, and implementation direction were handled by the team.
+
+## Medical Safety
+
+HerGuardian AI is designed to provide screening support, health education, preventive guidance, and timely awareness for women's wellbeing.
+
+The platform focuses on:
+
+* Helping users understand possible health patterns and risk signals.
+* Encouraging early conversations with qualified healthcare professionals.
+* Supporting safer next steps through reports, reminders, and appointment booking.
+* Promoting preventive care, health literacy, and emergency awareness.
+* Keeping medical decisions with certified doctors and healthcare providers.
+
+When serious symptoms or red flags are detected, HerGuardian AI guides the user toward professional care, emergency support, or booking a doctor appointment through the platform.
+
+## Deployment
+
+The project can be deployed on Vercel.
+
+Steps:
+
+1. Push the project to GitHub.
+2. Import the repository into Vercel.
+3. Add all required environment variables.
+4. Deploy the project.
+5. Add the deployed URL to Google OAuth and Razorpay dashboard.
+
+Google OAuth origin:
+
+```text
+https://her-guardian-ai-app-updated.vercel.app
+```
+
+Google OAuth redirect URI:
+
+```text
+https://her-guardian-ai-app-updated.vercel.app/api/auth/google/callback
+```
+
+Razorpay website URL:
+
+```text
+https://her-guardian-ai-app-updated.vercel.app
+```
+
+## License
+
+Built for academic and hackathon demonstration. Further review is recommended before production healthcare use.
+
