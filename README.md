@@ -303,28 +303,13 @@ Professional help is recommended if symptoms are severe or unusual.
 
 Additional documentation files:
 
-* `ARCHITECTURE.md` - system diagram, pipeline, data flow, components, and design decisions
-* `TECHNICAL\_REPORT.md` - runtime, model usage, latency, memory, and device notes
-* `LOCAL\_AI\_VERIFICATION.md` - what runs locally and what requires internet
-* `EVALUATION.md` - testing method, quality results, baseline comparison, and known failures
-* `PRIVACY\_AND\_SAFETY.md` - data handling, storage, permissions, limitations, and risks
-* `ATTRIBUTION.md` - models, libraries, APIs, references, and pre-existing work
+* `Innovation_Insurgents_Architecture.pdf` - system diagram, pipeline, data flow, components, and design decisions
+* `Innovation_Insurgents_Technical_Report.pdf` - runtime, model usage, latency, memory, and device notes
+* `Innovation_Insurgents_LocalAI_Verification.pdf` - what runs locally and what requires internet
+* `Innovation_Insurgents_Evaluation.pdf` - testing method, quality results, baseline comparison, and known failures
+* `Innovation_Insurgents_Privacy_and_Safety.pdf` - data handling, storage, permissions, limitations, and risks
+* `Innovation_Insurgents_Attribution.pdf` - models, libraries, APIs, references, and pre-existing work
 
-## How We Coordinated With AI Tools
-
-AI tools were used as development and planning assistants throughout the project. OpenAI Codex helped understand the code structure, debug errors, improve UI/UX, add new modules, fix authentication issues, integrate payment flow, prepare deployment steps, and generate documentation.
-
-AI support was used for:
-
-* Feature planning across dashboard, assessments, doctors, weekly checkup, calendar, testing agencies, facts, chatbot, support, and wellness care.
-* Code development for Next.js pages, API routes, UI components, forms, charts, reports, and navigation flows.
-* Debugging build errors, missing dependencies, incorrect imports, broken buttons, Razorpay issues, database setup, and deployment configuration.
-* UI/UX improvements including premium healthcare styling, dark/light mode, layouts, visual assets, and more engaging wellness sections.
-* Health content structuring for PCOS, menopause, menstrual health, mental wellness, reproductive health, nutrition, bone health, and preventive care.
-* Medical safety language to focus on awareness, screening, reports, and professional consultation.
-* Demo and documentation including README, GitHub explanation, deployment instructions, environment variables, and video script.
-
-AI was used as a collaborative assistant, while final project decisions, testing, feature selection, and implementation direction were handled by the team.
 
 ## Medical Safety
 
