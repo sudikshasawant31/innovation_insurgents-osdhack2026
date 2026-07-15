@@ -7,8 +7,7 @@ The platform is designed for screening support, health education, preventive gui
 ## Important Links
 
 * Live Deployment Link: https://her-guardian-ai-app-updated.vercel.app/
-* Demo Video Link: Add your YouTube or Google Drive demo video link here.
-
+* Demo Video Link: https://drive.google.com/file/d/1CF_Y2zPKLILmuMLfU_huGzbE6pEwGXuc/view?usp=sharing
 ## Features
 
 * AI health dashboard with health score, mental wellness, activity status, reports, recommendations, and emergency access.
