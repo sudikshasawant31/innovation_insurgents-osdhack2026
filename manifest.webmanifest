@@ -1,0 +1,37 @@
+{
+  "name": "HerGuardian AI",
+  "short_name": "HerGuardian",
+  "description": "Women safety, health, SOS, guardians, doctors, and subscriptions in one secure app.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "safety", "medical"],
+  "shortcuts": [
+    {
+      "name": "SOS",
+      "url": "/sos",
+      "description": "Open emergency SOS"
+    },
+    {
+      "name": "Doctors",
+      "url": "/doctors",
+      "description": "Find nearby doctors"
+    }
+  ]
+}
